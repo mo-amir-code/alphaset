@@ -1,0 +1,33 @@
+{
+  "name": "alphaset",
+  "version": "1.0.0",
+  "description": "Alphaset provides a functionality to set up everything quickly like redux tool kit, context, tailwind, etc",
+  "main": "./dist/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "alphaset": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mo-amir-code/alphaset.git"
+  },
+  "author": "Mo Amir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mo-amir-code/alphaset/issues"
+  },
+  "homepage": "https://github.com/mo-amir-code/alphaset#readme",
+  "devDependencies": {
+    "@types/node": "^20.14.7"
+  }
+}
