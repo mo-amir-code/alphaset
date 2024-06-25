@@ -1,7 +1,7 @@
 import inquirer from "inquirer";
-import { Answer, AnswerEnum } from "../types/services.js";
-import { spawn } from "child_process";
-import { SingleBar, Presets } from "cli-progress"
+import { AddSetupFileIntoProjectTypes, Answer, AnswerEnum } from "../types/services.js";
+import { exec } from "child_process";
+import axios from "axios";
 
 const questions = async (): Promise<Answer | any> => {
   try {
@@ -10,6 +10,12 @@ const questions = async (): Promise<Answer | any> => {
         type: "list",
         name: AnswerEnum.ts,
         message: "Are you using typescript",
+        choices: ["Yes", "No"],
+      },
+      {
+        type: "list",
+        name: AnswerEnum.src,
+        message: "Have you src directory",
         choices: ["Yes", "No"],
       },
       {
@@ -38,55 +44,46 @@ const questions = async (): Promise<Answer | any> => {
   }
 };
 
-const installPackage = async ({ packageName }: { packageName:string }): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    let isInstalled = true;
-    let totalData = 0;
-    const progressBar = new SingleBar({
-      format: 'Installing [{bar}] {percentage}% | ETA: {eta}s',
-      hideCursor: true
-    }, Presets.shades_grey);
+const installPackage = async ({
+  packageName,
+}: {
+  packageName: string;
+}): Promise<boolean> => {
+  let isInstalled = true;
 
-    progressBar.start(100, 0);
+  const childProcess = exec(`npm install ${packageName}`);
 
-    try {
-      const childProcess = spawn('npm', ['install', packageName], { shell: true });
+  childProcess.stdout?.on("data", (data) => {
+    console.log(`npm stdout: ${data}`);
+    console.log(`${packageName} is installing.....`);
+  });
 
-      childProcess.stdout.on('data', (data) => {
-        totalData += data.length;
-        const progress = Math.min(1, totalData / 10000); // This is a simple estimation
-        progressBar.update(progress * 100);
-        console.log(`npm stdout: ${data.toString()}`);
-      });
+  childProcess.stderr?.on("data", (data) => {
+    console.error(`npm stderr: ${data}`);
+    isInstalled = false;
+  });
 
-      childProcess.stderr.on('data', (data) => {
-        console.error(`npm stderr: ${data.toString()}`);
-        isInstalled = false;
-      });
-
-      childProcess.on('close', (code) => {
-        if (code === 0) {
-          progressBar.update(100); // Ensure the progress bar is full at the end
-          progressBar.stop();
-          console.log(`\n${packageName} installed successfully.`);
-        } else {
-          isInstalled = false;
-          console.error(`\nnpm install process exited with code ${code}`);
-        }
-        resolve(isInstalled);
-      });
-
-      childProcess.on('error', (error) => {
-        console.error(`\nnpm install process error: ${error}`);
-        isInstalled = false;
-        reject(error);
-      });
-    } catch (error:any) {
-      console.error(`Error: ${error.message}`);
-      reject(error);
+  childProcess.on("close", (code) => {
+    if (code === 0) {
+      console.log(`${packageName} installed successfully.`);
+    } else {
+      isInstalled = false;
+      console.error(`npm install process exited with code ${code}`);
     }
   });
+
+  return isInstalled;
 };
 
+const addSetupFileIntoProject = async ({isTs, isSrc, setupName}:AddSetupFileIntoProjectTypes) => {
+  try {    
 
-export { questions, installPackage };
+    const file = await axios.get("/api/path")
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+export { questions, installPackage, addSetupFileIntoProject };

@@ -36,4 +36,4 @@ const setup = async () => {
   }
 };
 
-export { setup }
+export { setup };

@@ -1,15 +1,25 @@
-export interface Answer{
+interface Answer{
     [key:string]:string
 }
 
-export enum AnswerEnum{
+enum AnswerEnum{
     ts="ts",
+    src="ts",
     tw="tw",
     redux="redux",
     context="context"
 }
 
-export enum AnswerChoices{
+enum AnswerChoices{
     Yes="Yes",
     No="No"
 }
+
+interface AddSetupFileIntoProjectTypes {
+    isTs: boolean,
+    isSrc: boolean,
+    setupName: string
+}
+
+
+export { Answer, AnswerEnum, AnswerChoices, AddSetupFileIntoProjectTypes };
