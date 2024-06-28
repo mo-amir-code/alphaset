@@ -1,5 +1,7 @@
 import { reduxSetup, tailwindSetup } from "../utils/data/index.js";
-import { addSetupFileIntoProject, installPackage, questions } from "../utils/services/services.js";
+import installPackage from "../utils/services/installPackage.js";
+import questions from "../utils/services/questions.js";
+import addSetupFileIntoProject from "../utils/services/setFilesInProject.js";
 import { AnswerChoices, AnswerEnum } from "../utils/types/services.js";
 
 const setup = async () => {
