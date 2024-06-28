@@ -4,8 +4,8 @@ interface Answer{
 
 enum AnswerEnum{
     ts="ts",
-    src="ts",
-    tw="tw",
+    src="src",
+    tw="tailwind",
     redux="redux",
     context="context"
 }
