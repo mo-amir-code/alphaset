@@ -19,7 +19,7 @@ $ npm install alphaset
 Now enter alphaset in your terminal and press enter
 
 ```console
-$ alphaset
+$ npx alphaset
 ```
 
 Now, respond to the questions based on your configuration and setup needs to finalize the package.
