@@ -10,11 +10,17 @@ const setup = async () => {
 
     let isTs = false;
     let isSrc = false;
+    let isNextJs = false;
 
     Object.entries(answers).forEach(async ([key, value]) => {
       switch (key as AnswerEnum) {
         case AnswerEnum.ts:
           isTs = true;
+          break;
+        case AnswerEnum.nextjs:
+          if(value === AnswerChoices.Yes){
+            isNextJs = true;
+          }
           break;
         case AnswerEnum.src:
           isSrc = true;
@@ -24,7 +30,7 @@ const setup = async () => {
             tailwindSetup.forEach(async (p: string) => {
               await installPackage({ packageName: p });
             });
-            await addSetupFileIntoProject({isSrc, isTs, setupName:AnswerEnum.tw});
+            await addSetupFileIntoProject({isSrc, isTs, setupName:AnswerEnum.tw, isNextJs});
           }
           break;
         case AnswerEnum.redux:

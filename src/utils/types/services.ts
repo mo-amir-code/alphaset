@@ -4,6 +4,7 @@ interface Answer{
 
 enum AnswerEnum{
     ts="ts",
+    nextjs="nextjs",
     src="src",
     tw="tailwind",
     redux="redux",
@@ -17,9 +18,15 @@ enum AnswerChoices{
 
 interface AddSetupFileIntoProjectTypes {
     isTs: boolean,
+    isNextJs?: boolean,
     isSrc: boolean,
     setupName: string
 }
 
+interface FileTransportType{
+    source: string,
+    destination: string
+}
 
-export { Answer, AnswerEnum, AnswerChoices, AddSetupFileIntoProjectTypes };
+
+export { Answer, AnswerEnum, AnswerChoices, AddSetupFileIntoProjectTypes, FileTransportType };

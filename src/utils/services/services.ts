@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
+import { FileTransportType } from "../types/services";
 // import { fileURLToPath } from "url";
 
 const findRootDirectory = () => {
@@ -31,7 +32,7 @@ const findRootDirectory = () => {
   return rootDir;
 };
 
-const moveFile = ({source, destination}:{source:string, destination:string}) => {
+const moveFile = async ({source, destination}:FileTransportType) => {
   fs.rename(source, destination, (err) => {
     if (err) {
       console.error('Error moving file:', err);
@@ -41,7 +42,39 @@ const moveFile = ({source, destination}:{source:string, destination:string}) => 
   });
 };
 
-const deleteFolderWithFiles = (folderPath:string) => {
+const moveFileContent = async ({ source, destination }:FileTransportType) => {
+  try {
+
+    // Read the content of the source file
+    const sourceContent = fs.readFileSync(source, 'utf-8');
+
+    // Ensure the destination directory exists
+    const destDir = path.dirname(destination);
+    fs.mkdirSync(destDir, { recursive: true });
+
+    // Read the content of the destination file if it exists
+    let destContent = '';
+    try {
+      destContent = fs.readFileSync(destination, 'utf-8');
+    } catch (err:any) {
+      if (err.code !== 'ENOENT') throw err; // Ignore error if file does not exist
+    }
+
+    // Combine the source content and destination content
+    const newContent = sourceContent + "\n\n" + destContent;
+
+    // Write the combined content back to the destination file
+    fs.writeFileSync(destination, newContent);
+
+    // Optionally, delete the source file if you want to move (not copy) the content
+    // fs.unlinkSync(source);
+    await deleteFolderWithFiles(path.dirname(source));
+    console.log(`Content from ${source} moved to the top of ${destination}`);
+  } catch (error) {
+    console.error("Error occurred while moving content:", error);
+  }
+};
+const deleteFolderWithFiles = async (folderPath:string) => {
   fs.rm(folderPath, { recursive: true, force: true }, (err) => {
     if (err) {
       console.error('Error deleting folder:', err);
@@ -58,4 +91,4 @@ const deleteFolderWithFiles = (folderPath:string) => {
 
 const rootDir = findRootDirectory();
 
-export { rootDir, moveFile, deleteFolderWithFiles };
+export { rootDir, moveFile, deleteFolderWithFiles, moveFileContent };

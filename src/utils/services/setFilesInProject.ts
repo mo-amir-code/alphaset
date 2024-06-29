@@ -3,13 +3,13 @@ import axios from "axios";
 import * as path from "path";
 import * as fs from "fs";
 import * as unzipper from "unzipper";
-import { rootDir } from "./services.js";
+import { moveFile, moveFileContent, rootDir } from "./services.js";
 
-const addSetupFileIntoProject = async ({isTs, isSrc, setupName}:AddSetupFileIntoProjectTypes) => {
+const addSetupFileIntoProject = async ({isTs, isSrc, setupName, isNextJs}:AddSetupFileIntoProjectTypes) => {
     try {    
   
       console.log(`${setupName} setup is setting up.......`);
-      const response = await axios.get(`https://hfz1qvmqrh.execute-api.us-east-1.amazonaws.com/setup?isTs=${isTs}&setupName=${setupName}`);
+      const response = await axios.get(`https://hpqwtb00jh.execute-api.ap-south-1.amazonaws.com/setup?isTs=${isTs}&setupName=${setupName}${isNextJs? "&isNextJs=true" : ""}`);
       
       console.log(`${setupName} setup is almost done.......`);
   
@@ -28,8 +28,13 @@ const addSetupFileIntoProject = async ({isTs, isSrc, setupName}:AddSetupFileInto
           .pipe(unzipper.Extract({ path: path.join(rootDir, `${isSrc? "src" : ""}`) }))
           .promise();
 
+        fs.unlinkSync(zipFilePath);
+
         if(setupName === AnswerEnum.tw){
-          
+          let source = `${rootDir}/${isSrc? "src/" : ""}${isNextJs? "nextjs" : "reactjs"}/`;
+          let dest = path.join(rootDir, 'tailwind.config.js')
+          await moveFile({source:source+"tailwind.config.js", destination: dest});
+          await moveFileContent({source: `${source}${isNextJs? "global.css" : "index.css"}`, destination: source.replace(isNextJs? "nextjs/" : "reactjs/", isNextJs? "app/globals.css" : "index.css")})
         }
   
           console.log(`${setupName} setup have been set.......`);

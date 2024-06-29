@@ -12,6 +12,12 @@ const questions = async (): Promise<Answer | any> => {
         },
         {
           type: "list",
+          name: AnswerEnum.nextjs,
+          message: "Are you using nextjs",
+          choices: ["Yes", "No"],
+        },
+        {
+          type: "list",
           name: AnswerEnum.src,
           message: "Have you src directory",
           choices: ["Yes", "No"],
