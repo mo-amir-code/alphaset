@@ -14,7 +14,7 @@ const setup = async () => {
 
     // Determine TypeScript, src, and Next.js settings
     if (answers[AnswerEnum.ts] === AnswerChoices.Yes) isTs = true;
-    if (answers[AnswerEnum.src]) isSrc = true;
+    if (answers[AnswerEnum.src] === AnswerChoices.Yes) isSrc = true;
     if (answers[AnswerEnum.nextjs] === AnswerChoices.Yes) isNextJs = true;
 
     // Setup Tailwind CSS

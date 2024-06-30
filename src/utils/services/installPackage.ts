@@ -1,4 +1,7 @@
 import { exec } from "child_process";
+import { promisify } from "util";
+
+const execPromise = promisify(exec);
 
 const installPackage = async ({
   packageName,
@@ -7,26 +10,12 @@ const installPackage = async ({
 }): Promise<boolean> => {
   let isInstalled = true;
 
-  const childProcess = exec(`npm install ${packageName}`);
-
-  childProcess.stdout?.on("data", (data) => {
-    // console.log(`npm stdout: ${data}`);
-    console.log(`${packageName} is installing.....`);
-  });
-
-  childProcess.stderr?.on("data", (data) => {
-    console.error(`npm stderr: ${data}`);
+  const {stdout, stderr} = await execPromise(`npm install ${packageName}`);
+  
+  if (stderr) {
+    console.error(`npm stderr: ${stderr}`);
     isInstalled = false;
-  });
-
-  childProcess.on("close", (code) => {
-    if (code === 0) {
-      console.log(`${packageName} installed successfully.`);
-    } else {
-      isInstalled = false;
-      console.error(`npm install process exited with code ${code}`);
-    }
-  });
+  }
 
   return isInstalled;
 };
