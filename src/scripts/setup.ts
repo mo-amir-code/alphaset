@@ -15,7 +15,9 @@ const setup = async () => {
     Object.entries(answers).forEach(async ([key, value]) => {
       switch (key as AnswerEnum) {
         case AnswerEnum.ts:
-          isTs = true;
+          if(value === AnswerChoices.Yes){
+            isTs = true;
+          }
           break;
         case AnswerEnum.nextjs:
           if(value === AnswerChoices.Yes){
