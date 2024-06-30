@@ -36,8 +36,6 @@ const moveFile = async ({source, destination}:FileTransportType) => {
   fs.rename(source, destination, (err) => {
     if (err) {
       console.error('Error moving file:', err);
-    } else {
-      console.log(`File moved from ${source} to ${destination}`);
     }
   });
 };
@@ -69,7 +67,6 @@ const moveFileContent = async ({ source, destination }:FileTransportType) => {
     // Optionally, delete the source file if you want to move (not copy) the content
     // fs.unlinkSync(source);
     await deleteFolderWithFiles(path.dirname(source));
-    console.log(`Content from ${source} moved to the top of ${destination}`);
   } catch (error) {
     console.error("Error occurred while moving content:", error);
   }

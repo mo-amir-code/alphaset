@@ -9,7 +9,7 @@ const addSetupFileIntoProject = async ({isTs, isSrc, setupName, isNextJs}:AddSet
     try {    
   
       console.log(`${setupName} setup is setting up.......`);
-      const response = await axios.get(`https://hpqwtb00jh.execute-api.ap-south-1.amazonaws.com/setup?isTs=${isTs}&setupName=${setupName}${isNextJs? "&isNextJs=true" : ""}`);
+      const response = await axios.get(`https://hpqwtb00jh.execute-api.ap-south-1.amazonaws.com/setup?${isTs? "isTs=true" : ""}&setupName=${setupName}${isNextJs? "&isNextJs=true" : ""}`);
       
       console.log(`${setupName} setup is almost done.......`);
   

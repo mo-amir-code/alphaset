@@ -10,7 +10,7 @@ const installPackage = async ({
   const childProcess = exec(`npm install ${packageName}`);
 
   childProcess.stdout?.on("data", (data) => {
-    console.log(`npm stdout: ${data}`);
+    // console.log(`npm stdout: ${data}`);
     console.log(`${packageName} is installing.....`);
   });
 
