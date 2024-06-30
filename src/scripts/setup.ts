@@ -12,46 +12,32 @@ const setup = async () => {
     let isSrc = false;
     let isNextJs = false;
 
-    Object.entries(answers).forEach(async ([key, value]) => {
-      switch (key as AnswerEnum) {
-        case AnswerEnum.ts:
-          if(value === AnswerChoices.Yes){
-            isTs = true;
-          }
-          break;
-        case AnswerEnum.nextjs:
-          if(value === AnswerChoices.Yes){
-            isNextJs = true;
-          }
-          break;
-        case AnswerEnum.src:
-          isSrc = true;
-          break;
-        case AnswerEnum.tw:
-          if (value === AnswerChoices.Yes) {
-            tailwindSetup.forEach(async (p: string) => {
-              await installPackage({ packageName: p });
-            });
-            await addSetupFileIntoProject({isSrc, isTs, setupName:AnswerEnum.tw, isNextJs});
-          }
-          break;
-        case AnswerEnum.redux:
-          if (value === AnswerChoices.Yes) {
-            await installPackage({ packageName: reduxSetup });
-            await addSetupFileIntoProject({isSrc, isTs, setupName:AnswerEnum.redux});
-          }
-          break;
-        case AnswerEnum.context:
-          if(value === AnswerChoices.Yes){
-            await addSetupFileIntoProject({isSrc, isTs, setupName:AnswerEnum.context});
-          }
-          break;
-        default:
-          console.error("Invalid choice error");
+    // Determine TypeScript, src, and Next.js settings
+    if (answers[AnswerEnum.ts] === AnswerChoices.Yes) isTs = true;
+    if (answers[AnswerEnum.src]) isSrc = true;
+    if (answers[AnswerEnum.nextjs] === AnswerChoices.Yes) isNextJs = true;
+
+    // Setup Tailwind CSS
+    if (answers[AnswerEnum.tw] === AnswerChoices.Yes) {
+      for (const p of tailwindSetup) {
+        await installPackage({ packageName: p });
       }
-    });
+      await addSetupFileIntoProject({ isSrc, isTs, setupName: AnswerEnum.tw, isNextJs });
+    }
+
+    // Setup Redux Toolkit
+    if (answers[AnswerEnum.redux] === AnswerChoices.Yes) {
+      await installPackage({ packageName: reduxSetup });
+      await addSetupFileIntoProject({ isSrc, isTs, setupName: AnswerEnum.redux });
+    }
+
+    // Setup Context API
+    if (answers[AnswerEnum.context] === AnswerChoices.Yes) {
+      await addSetupFileIntoProject({ isSrc, isTs, setupName: AnswerEnum.context });
+    }
+
   } catch (error) {
-    console.error(error);
+    console.error("Setup error:", error);
   }
 };
 
