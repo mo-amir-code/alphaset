@@ -71,12 +71,11 @@ const moveFileContent = async ({ source, destination }:FileTransportType) => {
     console.error("Error occurred while moving content:", error);
   }
 };
+
 const deleteFolderWithFiles = async (folderPath:string) => {
   fs.rm(folderPath, { recursive: true, force: true }, (err) => {
     if (err) {
       console.error('Error deleting folder:', err);
-    } else {
-      console.log(`Folder ${folderPath} deleted successfully.`);
     }
   });
 };

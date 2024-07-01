@@ -7,7 +7,7 @@ import { moveFile, moveFileContent, rootDir } from "./services.js";
 
 const addSetupFileIntoProject = async ({ isTs, isSrc, setupName, isNextJs }: AddSetupFileIntoProjectTypes) => {
   try {
-    console.log(`${setupName} setup is setting up.......`);
+    console.log(`${setupName} is setting up.......`);
 
     const queryParams = [];
     if (isTs) queryParams.push("isTs=true");
@@ -17,7 +17,7 @@ const addSetupFileIntoProject = async ({ isTs, isSrc, setupName, isNextJs }: Add
     const queryString = queryParams.join("&");
     const response = await axios.get(`https://hpqwtb00jh.execute-api.ap-south-1.amazonaws.com/setup?${queryString}`);
 
-    console.log(`${setupName} setup is almost done.......`);
+    console.log(`${setupName} is almost done.......`);
 
     if (response.status === 200) {
       const base64Data = response.data.body;
@@ -36,12 +36,12 @@ const addSetupFileIntoProject = async ({ isTs, isSrc, setupName, isNextJs }: Add
         await moveFile({ source: path.join(sourceBasePath, "tailwind.config.js"), destination: destPath });
 
         const sourceCssFile = path.join(sourceBasePath, isNextJs ? "global.css" : "index.css");
-        const destCssFile = path.join(rootDir, isNextJs ? "app/globals.css" : "index.css");
+        const destCssFile = path.join(rootDir, `src/${isNextJs ? "app/globals.css" : "index.css"}`);
 
         await moveFileContent({ source: sourceCssFile, destination: destCssFile });
       }
 
-      console.log(`${setupName} setup has been set.......`);
+      console.log(`${setupName} has been set.......`);
     } else {
       console.error('Failed to retrieve ZIP file:', response.status, response.data);
     }
